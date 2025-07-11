@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>五十音練習</title>
+  <style>
+    body {
+      font-family: "Noto Sans", sans-serif;
+      background: #f1f5f9;
+      margin: 0;
+      padding: 50px 20px;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      color: #1e293b;
+      margin-bottom: 40px;
+      font-size: 2.8em;
+      font-weight: 700;
+    }
+    .card {
+      background: #fff;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    .form-group {
+      margin-bottom: 25px;
+      text-align: center;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      font-size: 1.1em;
+      color: #1e293b;
+    }
+    select, button {
+      width: 100%;
+      padding: 12px;
+      font-size: 1em;
+      border-radius: 8px;
+      border: 1px solid #cbd5e1;
+      transition: all 0.3s;
+      text-align: center;
+    }
+    select option {
+      text-align: center;
+    }
+    select:focus, button:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+    button {
+      background: #3b82f6;
+      color: #fff;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      text-align: center;
+    }
+    button:hover {
+      background: #2563eb;
+    }
+    .hidden {
+      display: none;
+    }
+    .question {
+      text-align: center;
+      font-size: 1.5em;
+      margin-bottom: 30px;
+      color: #2c3e50;
+      font-weight: bold;
+    }
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-top: 20px;
+      align-items: center;
+    }
+    button.opt {
+      background: #5c9ded;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.2em;
+      padding: 12px;
+      cursor: pointer;
+      transition: background 0.3s;
+      width: 200px;
+      text-align: center;
+    }
+    button.opt:hover {
+      background: #417cd6;
+    }
+    button.correct {
+      background: #28a745 !important;
+    }
+    button.wrong {
+      background: #e74c3c !important;
+    }
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .result {
+      background: #fff;
+      max-width: 600px;
+      margin: 30px auto;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    .result h2 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 20px;
+      font-size: 2em;
+    }
+    .result ul {
+      list-style: none;
+      padding: 0;
+      font-size: 1.1em;
+      color: #555;
+    }
+    .result li {
+      background: #f8f9fa;
+      margin-bottom: 10px;
+      padding: 12px;
+      border-radius: 6px;
+    }
+    .center {
+      text-align: center;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <h1>五十音練習</h1>
+
+  <div id="setup" class="card">
+    <div class="form-group">
+      <label for="range">範圍</label>
+      <select id="range"></select>
+    </div>
+    <div class="form-group">
+      <label for="count">題數</label>
+      <select id="count">
+        <option>5</option><option>10</option><option>15</option><option>20</option>
+        <option>25</option><option>30</option><option>40</option><option>50</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="mode">答題方式</label>
+      <select id="mode">
+        <option value="toHira">平假名</option>
+        <option value="toRomaji">讀音</option>
+      </select>
+    </div>
+    <button id="start">開始</button>
+  </div>
+
+  <div id="quiz" class="hidden card">
+    <div class="question" id="question"></div>
+    <div class="options" id="options"></div>
+  </div>
+
+  <div id="result" class="hidden result">
+    <h2 id="score"></h2>
+    <ul id="details"></ul>
+    <div class="center">
+      <button id="restart">再試一次</button>
+    </div>
+  </div>
+
+  <script>
+    const rows = [
+      { name: 'あ行', chars: ['a','i','u','e','o'], hira:['あ','い','う','え','お'] },
+      { name: 'か行', chars: ['ka','ki','ku','ke','ko'], hira:['か','き','く','け','こ'] },
+      { name: 'さ行', chars: ['sa','shi','su','se','so'], hira:['さ','し','す','せ','そ'] },
+      { name: 'た行', chars: ['ta','chi','tsu','te','to'], hira:['た','ち','つ','て','と'] },
+      { name: 'な行', chars: ['na','ni','nu','ne','no'], hira:['な','に','ぬ','ね','の'] },
+      { name: 'は行', chars: ['ha','hi','fu','he','ho'], hira:['は','ひ','ふ','へ','ほ'] },
+      { name: 'ま行', chars: ['ma','mi','mu','me','mo'], hira:['ま','み','む','め','も'] },
+      { name: 'や行', chars: ['ya','','yu','','yo'], hira:['や','','ゆ','','よ'] },
+      { name: 'ら行', chars: ['ra','ri','ru','re','ro'], hira:['ら','り','る','れ','ろ'] },
+      { name: 'わ行', chars: ['wa','','','','wo'], hira:['わ','','','','を'] }
+    ];
+
+    const rangeSelect = document.getElementById('range');
+    rows.forEach((row, idx)=>{
+      const opt = document.createElement('option');
+      opt.value = idx;
+      opt.textContent = `あ行～${row.name}`;
+      rangeSelect.appendChild(opt);
+    });
+
+    const shuffle = arr => arr.sort(() => Math.random() - 0.5);
+
+    let pool = [], current = 0, results = [], mode;
+
+    document.getElementById('start').onclick = () => {
+      const maxRow = parseInt(document.getElementById('range').value);
+      const count = parseInt(document.getElementById('count').value);
+      mode = document.getElementById('mode').value;
+
+      pool = [];
+      for (let i=0; i<=maxRow; i++) {
+        rows[i].chars.forEach((romaji, j)=>{
+          if (romaji) {
+            pool.push({ romaji, hira: rows[i].hira[j] });
+          }
+        });
+      }
+      pool = shuffle(pool).slice(0, count);
+      current = 0;
+      results = [];
+
+      document.getElementById('setup').classList.add('hidden');
+      document.getElementById('quiz').classList.remove('hidden');
+      nextQuestion();
+    };
+
+    function nextQuestion() {
+      if (current >= pool.length) {
+        showResult();
+        return;
+      }
+      const item = pool[current];
+      const qDiv = document.getElementById('question');
+      const optsDiv = document.getElementById('options');
+      optsDiv.innerHTML = '';
+
+      let correct, questionText, options;
+      if (mode === 'toHira') {
+        questionText = `請選出：「${item.romaji}」 對應的平假名`;
+        correct = item.hira;
+        options = shuffle(pool.map(x => x.hira)).filter(x => x !== '').slice(0, 3);
+      } else {
+        questionText = `請選出：「${item.hira}」 對應的讀音`;
+        correct = item.romaji;
+        options = shuffle(pool.map(x => x.romaji)).slice(0, 3);
+      }
+      if (!options.includes(correct)) {
+        options[Math.floor(Math.random() * 3)] = correct;
+      }
+      options = shuffle(options);
+
+      qDiv.textContent = questionText;
+      options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.classList.add('opt');
+        btn.textContent = opt;
+        btn.onclick = () => {
+          if (opt === correct) {
+            btn.classList.add('correct');
+          } else {
+            btn.classList.add('wrong');
+          }
+          results.push({
+            question: mode === 'toHira' ? item.romaji : item.hira,
+            correct,
+            chosen: opt
+          });
+          document.querySelectorAll('button.opt').forEach(b => b.disabled = true);
+          setTimeout(() => {
+            current++;
+            nextQuestion();
+          }, 1000);
+        };
+        optsDiv.appendChild(btn);
+      });
+    }
+
+    function showResult() {
+      document.getElementById('quiz').classList.add('hidden');
+      document.getElementById('result').classList.remove('hidden');
+
+      const score = results.filter(r => r.chosen === r.correct).length;
+      document.getElementById('score').textContent = `你的分數：${score} / ${results.length}`;
+
+      const ul = document.getElementById('details');
+      ul.innerHTML = '';
+      results.forEach((r, i)=>{
+        if (r.chosen !== r.correct) {
+          const li = document.createElement('li');
+          li.textContent = `第 ${i+1} 題：題目「${r.question}」，你選「${r.chosen}」，正確答案「${r.correct}」。`;
+          ul.appendChild(li);
+        }
+      });
+    }
+
+    document.getElementById('restart').onclick = () => {
+      document.getElementById('result').classList.add('hidden');
+      document.getElementById('setup').classList.remove('hidden');
+    };
+  </script>
+</body>
+</html>
