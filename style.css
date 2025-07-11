@@ -1,0 +1,156 @@
+body {
+  font-family: "Noto Sans", sans-serif;
+  background: #f6f8fb;
+  margin: 0;
+  padding: 50px 20px;
+  color: #333;
+}
+
+h1 {
+  text-align: center;
+  color: #1e293b;
+  margin-bottom: 40px;
+  font-size: 2.8em;
+  font-weight: 700;
+}
+
+.card {
+  background: #fff;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: 1.1em;
+  color: #1e293b;
+}
+
+select, button {
+  width: 100%;
+  padding: 12px;
+  font-size: 1em;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  transition: all 0.3s;
+  text-align: center;
+}
+
+select option {
+  text-align: center;
+}
+
+select:focus, button:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+button {
+  background: #3b82f6;
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+}
+
+button:hover {
+  background: #2563eb;
+}
+
+.hidden {
+  display: none;
+}
+
+.question {
+  text-align: center;
+  font-size: 1.5em;
+  margin-bottom: 30px;
+  color: #2c3e50;
+  font-weight: bold;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+  align-items: center;
+}
+
+button.opt {
+  background: #5c9ded;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.2em;
+  padding: 12px;
+  cursor: pointer;
+  transition: background 0.3s;
+  width: 200px;
+  text-align: center;
+}
+
+button.opt:hover {
+  background: #417cd6;
+}
+
+button.correct {
+  background: #28a745 !important;
+}
+
+button.wrong {
+  background: #e74c3c !important;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.result {
+  background: #fff;
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.result h2 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  font-size: 2em;
+}
+
+.result ul {
+  list-style: none;
+  padding: 0;
+  font-size: 1.1em;
+  color: #555;
+}
+
+.result li {
+  background: #f8f9fa;
+  margin-bottom: 10px;
+  padding: 12px;
+  border-radius: 6px;
+}
+
+.center {
+  text-align: center;
+  margin-top: 30px;
+}
